@@ -1,0 +1,464 @@
+/*
+ * assets/css/guestaccomo.css  -  GUEST ACCOMMODATIONS PAGE
+ * The hero uses the SAME classes as home.php (.home-section, .home-center, .home-welcome,
+ * .home-title, .home-sub, .home-tagline) from home.css, so the font, size, spacing, overlay
+ * and the sparkle in the "O" are exactly like the home page.
+ * This file only adds: the header (logo + nav), the bottom links, and the centering.
+ * Left and right margins are equal (--ga-pad).
+ */
+@view-transition { navigation: auto; }
+
+:root {
+    --ga-pad: 4.5vw;                    /* same margin on the left and the right */
+    --blend-h: min(9rem, 18vh);          /* height of the soft blend between page sections (same everywhere) */
+}
+
+body.ga-body {
+    margin: 0;
+    background: #14202b;
+    color: #fff;
+    overflow-x: hidden;
+    animation: ga-page-in .8s ease both;
+    transition: opacity .35s ease;
+}
+body.ga-leaving { opacity: 0; }
+.ga-body a { color: inherit; text-decoration: none; }
+.ga-body ul { margin: 0; padding: 0; list-style: none; }
+
+/* ---------- hero: home.css look, content centered ---------- */
+.ga-home { display: block; }                           /* keeps the full-screen block layout on phones too */
+/* the hero photo fades into the cream section below */
+.ga-home::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 14%;                                         /* lower fade: the text above stays on the photo */
+    background: linear-gradient(to bottom,
+        rgba(253, 245, 230, 0)   0%,
+        rgba(253, 245, 230, .08) 25%,
+        rgba(253, 245, 230, .32) 50%,
+        rgba(253, 245, 230, .70) 78%,
+        var(--cream, #fdf5e6)   100%);
+    pointer-events: none;
+}
+.ga-home .home-center {
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    margin: 0;
+    padding: 0 1rem;
+    transform: translateY(-50%);                       /* centered vertically */
+}
+
+/* bottom row: tagline (left) | links (right), same side margins as the header */
+.ga-bottom {
+    position: absolute;
+    left: var(--ga-pad);
+    right: var(--ga-pad);
+    z-index: 2;
+    bottom: 15%;                         /* sits just above the fade so the white text stays readable */
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+}
+.ga-bottom .home-tagline { position: static; margin: 0; }
+.ga-foot { display: flex; gap: 3rem; margin-right: -.3em; }   /* cancels trailing letter-spacing */
+.ga-foot-booking { display: none; }
+.ga-foot a {
+    display: inline-block;
+    font-family: var(--font-nav, "Jost", system-ui, sans-serif);
+    font-size: .75rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.ga-foot a:hover, .ga-foot a:focus-visible { text-decoration: underline; text-underline-offset: .4rem; }
+
+/* ---------- header ---------- */
+.ga-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    height: 8rem;
+    padding: 0 var(--ga-pad);
+    background: linear-gradient(rgba(8, 12, 20, .45), transparent);
+    animation: ga-fade-down .9s cubic-bezier(.2, .7, .2, 1) .1s both;
+}
+.ga-logo {
+    flex: none;
+    width: 5.25rem; height: 5.25rem;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: transform .25s ease;
+}
+.ga-logo:hover, .ga-logo:focus-visible { transform: scale(1.06); }
+.ga-logo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.ga-nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 4rem;
+    margin-right: -.3em;                 /* cancels trailing letter-spacing so MY BOOKING sits on the margin */
+}
+.ga-nav ul { display: flex; align-items: center; gap: 2.5rem; }
+.ga-nav a {
+    position: relative;
+    display: inline-block;
+    padding: .4rem 0;
+    font-family: var(--font-nav, "Jost", system-ui, sans-serif);
+    font-size: .75rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.ga-nav a::after {                       /* underline slides in on hover, stays on the current page */
+    content: "";
+    position: absolute; left: 0; bottom: 0;
+    width: calc(100% - .3em);
+    height: 2px;
+    background: #fff;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .4s cubic-bezier(.2, .7, .2, 1);
+}
+.ga-nav a:hover::after, .ga-nav a:focus-visible::after, .ga-nav a.active::after { transform: scaleX(1); }
+
+/* header over the cream section: cream bar, brown text */
+.ga-header { transition: background .4s ease, height .4s ease, box-shadow .4s ease; }
+.ga-logo { transition: transform .25s ease, width .4s ease, height .4s ease; }
+.ga-nav a { transition: color .4s ease; }
+.ga-header.is-light {                    /* transparent: the content stays fully visible under/behind the nav */
+    height: 5.5rem;
+    background: transparent;
+    box-shadow: none;
+}
+.ga-header.is-light .ga-logo { width: 3.9rem; height: 3.9rem; }
+.ga-header.is-light .ga-nav a { color: var(--brown, #5e3b27); }
+.ga-header.is-light .ga-nav a::after { background: var(--brown, #5e3b27); }
+
+/* =====================================================================
+   POOL / BEACH / RULES SECTION
+   Cream background, brown text, same fonts as the home page.
+   ===================================================================== */
+.ga-info {
+    position: relative;
+    background: var(--cream, #fdf5e6);
+    color: var(--brown, #5e3b27);
+    padding: 2.5rem var(--ga-pad) 4rem;
+}
+/* BLEND: pool/beach/rules (cream) -> accommodations (tan).
+   A cream fade hangs from the bottom edge of this section over the top of the next one, with the same
+   soft easing as the hero photo fade. It sits under the next section's content, so text stays crisp. */
+.ga-info::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    top: calc(100% - 1px);
+    height: var(--blend-h);
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom,
+        rgba(253, 245, 230, 1)   0%,
+        rgba(253, 245, 230, .92) 12%,
+        rgba(253, 245, 230, .75) 28%,
+        rgba(253, 245, 230, .50) 45%,
+        rgba(253, 245, 230, .25) 65%,
+        rgba(253, 245, 230, .08) 85%,
+        rgba(253, 245, 230, 0)   100%);
+}
+.ga-info-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 2fr) minmax(0, 1fr);
+    column-gap: 1.75rem;
+    align-items: stretch;
+    width: 100%;                         /* full width between the same side margins as the header */
+}
+.ga-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid rgba(94, 59, 39, .18);
+    border-radius: .8rem;
+    background: rgba(255, 250, 241, .72);
+    box-shadow: 0 .35rem 1.1rem rgba(74, 45, 28, .07);
+}
+.ga-col::before {
+    content: "";
+    display: block;
+    flex: none;
+    width: 2rem;
+    height: 2px;
+    margin-bottom: .55rem;
+    border-radius: 2px;
+    background: rgba(180, 125, 77, .7);
+}
+
+/* headings: same height on every column so the frames start on one line */
+.ga-colhead { min-height: 7.2rem; margin-bottom: .9rem; }
+.ga-colhead h2 {
+    margin: 0;
+    font-family: var(--font-hero, "Italiana", Georgia, serif);
+    font-weight: 400;
+    font-size: 2.4rem;
+    line-height: 1.15;
+    color: var(--brown, #5e3b27);
+}
+.ga-colhead p {
+    margin: .55rem 0 0;
+    font-family: var(--font-hero, "Italiana", Georgia, serif);
+    font-size: 1rem;
+    line-height: 1.3;
+    color: var(--brown, #5e3b27);
+}
+.ga-col-rules .ga-colhead h2 { max-width: 12ch; }
+
+/* picture frames (same style as the home page cards) */
+.ga-frame {
+    position: relative;
+    display: flex;
+    margin: 0;
+    padding: .55rem;
+    border: 1px solid rgba(94, 59, 39, .24);
+    border-radius: .6rem;
+    background: rgba(255, 244, 226, .7);
+    transition: transform .45s cubic-bezier(.2, .7, .2, 1), box-shadow .45s ease, border-color .3s ease;
+}
+.ga-frame::before {                      /* thin inner line on hover */
+    content: "";
+    position: absolute;
+    inset: .3rem;
+    border: 1px solid var(--brown, #5e3b27);
+    opacity: 0;
+    transform: scale(.97);
+    transition: opacity .4s ease, transform .45s cubic-bezier(.2, .7, .2, 1);
+    pointer-events: none;
+    z-index: 2;
+}
+.ga-photo { position: relative; display: block; flex: 1 1 auto; width: 100%; min-width: 0; overflow: hidden; border-radius: .35rem; }
+.ga-photo img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .9s cubic-bezier(.2, .7, .2, 1);
+}
+.ga-frame:hover { transform: translateY(-.4rem); border-color: var(--brown-dark, #4a2d1c); box-shadow: 0 1rem 2.25rem rgba(74, 45, 28, .24); }
+.ga-frame:hover::before { opacity: .55; transform: scale(1); }
+.ga-frame:hover .ga-photo img { transform: scale(1.06); }
+
+.ga-frame-pool { flex: 1; min-height: 28rem; }            /* stretches to the height of the beach column */
+.ga-frame-beach, .ga-frame-rules { display: block; }
+.ga-frame-beach .ga-photo { aspect-ratio: 16 / 9; }
+.ga-photo-rules img { position: static; display: block; width: 100%; height: auto; object-fit: contain; }
+
+/* access list */
+.ga-access {
+    margin-top: 1rem;
+    padding: .75rem .9rem;
+    border: 1px solid rgba(94, 59, 39, .16);
+    border-radius: .65rem;
+    background: rgba(255, 244, 226, .68);
+}
+.ga-access h3 {
+    margin: 0;
+    font-family: var(--font-hero, "Italiana", Georgia, serif);
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.3;
+}
+.ga-access ul { margin: .1rem 0 0; padding-left: 2.1rem; list-style: disc; }
+.ga-access li {
+    padding-left: .2rem;
+    font-family: var(--font-hero, "Italiana", Georgia, serif);
+    font-size: 1.6rem;
+    line-height: 1.3;
+}
+.ga-access li::marker { font-size: .9em; }
+
+/* reveal on scroll */
+html .ga-reveal:not(.in-view) { opacity: 0; transform: translateY(1.5rem); }
+.ga-reveal.in-view { animation: ga-fade-up 1s cubic-bezier(.2, .7, .2, 1) var(--d, 0s) both; }
+
+/* ---------- animations ---------- */
+.ga-in { animation: ga-fade-up 1s cubic-bezier(.2, .7, .2, 1) var(--d, 0s) both; }
+@keyframes ga-fade-up   { from { opacity: 0; transform: translateY(1.2rem); } to { opacity: 1; transform: none; } }
+@keyframes ga-fade-down { from { opacity: 0; transform: translateY(-1rem); } to { opacity: 1; transform: none; } }
+@keyframes ga-page-in   { from { opacity: 0; } to { opacity: 1; } }
+
+.ga-body :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+    .ga-body *, .ga-body *::before, .ga-body *::after { animation: none !important; transition: none !important; }
+    html .ga-reveal:not(.in-view) { opacity: 1; transform: none; }
+}
+
+/* ---------- tablet ---------- */
+@media (max-width: 1000px) {
+    :root { --ga-pad: 5vw; }
+    .ga-nav { margin-left: 2rem; }
+    .ga-info-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); row-gap: 2.5rem; }
+    .ga-col-rules { grid-column: 1 / -1; max-width: 26rem; justify-self: center; width: 100%; }
+    .ga-colhead { min-height: 0; }
+    .ga-colhead h2 { font-size: 2rem; }
+    .ga-access h3, .ga-access li { font-size: 1.3rem; }
+}
+
+/* ---------- phone ---------- */
+@media (max-width: 767.98px) {
+    :root { --ga-pad: 1.25rem; }
+    .ga-header { height: 5.5rem; }
+    .ga-logo { width: 3.6rem; height: 3.6rem; }
+    .ga-nav { margin-left: 1.2rem; }
+    .ga-nav-right { display: none; }                   /* My Booking moves to the bottom row */
+    .ga-nav ul { gap: 1rem; }
+    .ga-nav a { font-size: .6rem; letter-spacing: .2em; padding: .5rem 0; }
+    .ga-home { height: 100vh; height: 100dvh; padding: 0; display: block; }
+    .ga-bottom { bottom: 11%; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
+    .ga-bottom .home-tagline { max-width: 22rem; }
+    .ga-foot { justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .ga-foot-booking { display: block; }
+    .ga-foot a { font-size: .6rem; letter-spacing: .22em; }
+    .ga-home::after { height: 9%; }
+
+    .ga-info { padding: 1.5rem 1.25rem 3rem; }
+    .ga-info-grid { grid-template-columns: 1fr; row-gap: 2.5rem; }
+    .ga-col-pool, .ga-col-beach, .ga-col-rules { max-width: 30rem; width: 100%; justify-self: center; }
+    .ga-colhead h2 { font-size: 1.9rem; }
+    .ga-colhead p { font-size: .95rem; }
+    .ga-frame-pool { flex: none; min-height: 0; }
+    .ga-frame-pool { display: block; }
+    .ga-frame-pool .ga-photo { aspect-ratio: 4 / 5; }
+    .ga-access h3 { font-size: 1.3rem; }
+    .ga-access li { font-size: 1.15rem; }
+    .ga-header.is-light { height: 4.75rem; }
+}
+
+
+/* =====================================================================
+   DESKTOP / LAPTOP: the pool-beach-rules section fits EXACTLY one screen.
+   Everything is sized with min(rem, vh) so nothing is cut off on short screens,
+   and the pictures stretch to fill the space that is left.
+   Normal manual scrolling (no auto-scroll / snapping). The section is the last block of the
+   page, so when you scroll to the end it fills the screen exactly.
+   The nav (5.5rem) is transparent, so the section starts just below it.
+   ===================================================================== */
+@media (min-width: 1001px) {
+    .ga-info {
+        display: flex;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 30rem;
+        padding: 5.75rem var(--ga-pad) min(1.5rem, 3vh);
+    }
+    .ga-info-grid { flex: 1; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+    .ga-col { min-height: 0; }
+
+    .ga-colhead { height: min(6.2rem, 13vh); min-height: 0; margin-bottom: min(.8rem, 1.5vh); }
+    .ga-colhead h2 { font-size: min(2.3rem, 5vh); }
+    .ga-colhead p  { margin-top: .4rem; font-size: min(1rem, 2.2vh); }
+
+    .ga-frame { flex: 1 1 0; min-height: 0; display: flex; padding: min(.7rem, 1.4vh); }
+    .ga-frame-pool { min-height: 0; }
+    .ga-frame-beach .ga-photo { aspect-ratio: auto; }
+    .ga-photo-rules img { position: absolute; inset: 0; height: 100%; object-fit: contain; }
+
+    .ga-access { flex: none; margin-top: min(1.1rem, 1.8vh); }
+    .ga-access h3 { font-size: min(1.5rem, 3.3vh); line-height: 1.25; }
+    .ga-access li { font-size: min(1.35rem, 3vh); line-height: 1.25; }
+}
+
+
+/* =====================================================================
+   PHOTO VIEWER (lightbox) - opens on the same page
+   ===================================================================== */
+.ga-info .ga-photo { cursor: zoom-in; }
+body.ga-lb-open { overflow: hidden; }
+
+.ga-lb {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(8, 12, 20, .88);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    animation: ga-lb-in .3s ease both;
+}
+.ga-lb[hidden] { display: none; }
+.ga-lb.closing { animation: ga-lb-out .22s ease both; }
+
+.ga-lb-figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: min(92vw, 70rem);
+    margin: 0;
+}
+.ga-lb-figure img {
+    display: block;
+    max-width: 100%;
+    max-height: 82vh;
+    max-height: 82dvh;
+    padding: .55rem;
+    border: 1px solid rgba(255, 255, 255, .55);
+    background: var(--cream, #fdf5e6);
+    object-fit: contain;
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, .55);
+    transition: opacity .3s ease, transform .3s ease;
+    animation: ga-lb-zoom .45s cubic-bezier(.2, .7, .2, 1) both;
+}
+.ga-lb-figure img.swap { opacity: 0; transform: scale(.96); animation: none; }
+.ga-lb-figure figcaption {
+    margin-top: .8rem;
+    font-family: var(--font-hero, "Italiana", Georgia, serif);
+    font-size: 1.2rem;
+    letter-spacing: .05em;
+    color: #fff;
+    text-align: center;
+}
+
+.ga-lb-close, .ga-lb-nav {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.6rem; height: 2.6rem;
+    padding: 0;
+    color: #fff;
+    background: rgba(255, 255, 255, .08);
+    border: 1.5px solid rgba(255, 255, 255, .75);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background .25s ease, color .25s ease, transform .25s ease;
+}
+.ga-lb-close:hover, .ga-lb-nav:hover, .ga-lb-close:focus-visible, .ga-lb-nav:focus-visible { background: #fff; color: var(--brown, #5e3b27); }
+.ga-lb-close { position: absolute; top: 1.25rem; right: 1.25rem; }
+.ga-lb-nav:hover { transform: scale(1.08); }
+
+@keyframes ga-lb-in   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ga-lb-out  { from { opacity: 1; } to { opacity: 0; } }
+@keyframes ga-lb-zoom { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 767.98px) {
+    .ga-lb { gap: 0; padding: 1rem .5rem; }
+    .ga-lb-nav { position: absolute; bottom: 1rem; width: 2.4rem; height: 2.4rem; }
+    .ga-lb-prev { left: calc(50% - 3.2rem); }
+    .ga-lb-next { right: calc(50% - 3.2rem); }
+    .ga-lb-figure img { max-height: 74vh; max-height: 74dvh; }
+    .ga-lb-figure figcaption { font-size: 1rem; }
+}
+/* The rates sections already reserve space for the fixed header in their own padding. */
+html { scroll-padding-top: 0; }

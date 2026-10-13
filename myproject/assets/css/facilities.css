@@ -1,0 +1,297 @@
+/*
+ * FACILITIES SECTION (facilities.php)
+ * Same rem scaling and font variables as style.css, so it fits the
+ * screen the same way as the other sections.
+ */
+.fac {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100dvh - var(--header-h));
+    padding: .9rem 3.3rem 5.1rem;
+    background: var(--cream);
+    color: var(--brown);
+}
+.fac::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 4.25rem;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(49, 82, 116, .2) 42%,
+        rgba(49, 82, 116, .96) 100%
+    );
+    pointer-events: none;
+}
+.fac > * { position: relative; z-index: 2; }
+
+/* ---- logo, top left ---- */
+.fac-logo {
+    position: absolute;
+    top: 1.75rem;
+    left: 3rem;
+    z-index: 2;
+    width: 5.4rem;
+    height: 5.4rem;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: transform .25s ease;
+}
+.fac-logo:hover, .fac-logo:focus-visible { transform: scale(1.06); }
+.fac-logo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---- title + paragraph ---- */
+.fac-title {
+    margin: 0;
+    text-align: center;
+    font-family: var(--font-hero);
+    font-weight: 400;
+    font-size: 3.1rem;
+    line-height: 3.4rem;
+    color: var(--brown);
+}
+.fac-text {
+    max-width: 50rem;
+    margin: .55rem 0 1rem 6.7rem;      /* starts to the right of the logo */
+    font-family: var(--font-hero);
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+    letter-spacing: .02em;
+    color: var(--brown);
+}
+
+/* ---- 3 x 2 grid of picture cards ---- */
+.fac-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 1.1rem .65rem;
+    min-height: 22rem;
+}
+.fac-card { display: flex; margin: 0; min-width: 0; min-height: 0; }
+
+.fac-frame {
+    flex: 1;
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    padding: .3rem;
+    border: 1px solid rgba(94, 59, 39, .75);   /* simple border */
+    border-radius: 1rem;                       /* curved corners */
+    outline: 0;
+    transition: transform .4s cubic-bezier(.2, .7, .2, 1), box-shadow .4s ease, border-color .3s ease;
+}
+.fac-photo {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    border-radius: .7rem;                      /* curved corners, follows the border */
+    background: rgba(94, 59, 39, .08);
+}
+.fac-photo img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1);
+    transition: transform 1s cubic-bezier(.2, .7, .2, 1);
+}
+/* soft dark fade at the bottom so the white name is easy to read */
+.fac-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(20, 12, 6, .42), rgba(20, 12, 6, 0) 45%);
+    transition: opacity .4s ease;
+    pointer-events: none;
+}
+.fac-photo figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: .5rem;
+    z-index: 1;
+    text-align: center;
+    font-family: var(--font-hero);
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    color: #fff;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, .4);
+    transition: transform .4s cubic-bezier(.2, .7, .2, 1), letter-spacing .4s ease;
+}
+
+/* ---- simple hover animation: photo zooms in, name lifts, card rises ---- */
+.fac-frame:hover, .fac-frame:focus-visible {
+    transform: translateY(-.3rem);
+    border-color: var(--brown-dark);
+    box-shadow: 0 .8rem 1.6rem rgba(74, 45, 28, .22);
+}
+.fac-frame:hover .fac-photo img,
+.fac-frame:focus-visible .fac-photo img { transform: scale(1.1); }
+.fac-frame:hover .fac-photo figcaption,
+.fac-frame:focus-visible .fac-photo figcaption { transform: translateY(-.25rem); letter-spacing: .04em; }
+
+@media (prefers-reduced-motion: reduce) {
+    .fac-frame, .fac-photo img, .fac-photo figcaption { transition: none; }
+    .fac-frame:hover, .fac-frame:focus-visible,
+    .fac-frame:hover .fac-photo img, .fac-frame:hover .fac-photo figcaption { transform: none; }
+}
+
+/* =================== RESPONSIVE =================== */
+/* tablet in portrait: taller cards */
+@media (min-width: 768px) and (max-aspect-ratio: 1/1) {
+    .fac-grid { min-height: 34rem; }
+}
+
+/* mobile */
+@media (max-width: 767.98px) {
+    .fac { min-height: 0; padding: 1.25rem 1.25rem 2.25rem; }
+    .fac-logo { position: relative; top: auto; left: auto; display: block; width: 4rem; height: 4rem; margin: 0 auto; }
+    .fac-title { padding-top: .75rem; font-size: clamp(2rem, 10vw, 2.75rem); line-height: 1.2; }
+    .fac-text { max-width: none; margin: .75rem 0 1.5rem; font-size: 1.0625rem; line-height: 1.6rem; text-align: center; }
+
+    .fac-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; gap: 1rem .75rem; min-height: 0; }
+    .fac-frame { display: block; }
+    .fac-photo { aspect-ratio: 4 / 3; flex: none; }
+    .fac-photo figcaption { font-size: 1.125rem; bottom: .4rem; }
+}
+@media (max-width: 479.98px) {
+    .fac-grid { grid-template-columns: 1fr; }
+    .fac-photo { aspect-ratio: 16 / 10; }
+}
+
+/* phones in landscape */
+@media (max-width: 900px) and (max-height: 500px) {
+    .fac-title { font-size: 2.25rem; line-height: 2.5rem; }
+    .fac-text { font-size: 1rem; line-height: 1.5rem; }
+}
+
+
+/* =================== CLICKABLE CARDS + PHOTO VIEWER =================== */
+.fac-frame { cursor: zoom-in; }
+
+/* small magnifier badge that appears on hover */
+.fac-photo::before {
+    content: "";
+    position: absolute;
+    top: .6rem;
+    right: .6rem;
+    z-index: 1;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: rgba(255, 244, 226, .92) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='8.5' cy='8.5' r='5' fill='none' stroke='%235e3b27' stroke-width='1.6'/%3E%3Cpath d='M12.2 12.2L16.5 16.5M8.5 6.5v4M6.5 8.5h4' stroke='%235e3b27' stroke-width='1.6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E") center / 58% no-repeat;
+    opacity: 0;
+    transform: scale(.7);
+    transition: opacity .3s ease, transform .3s cubic-bezier(.2, .7, .2, 1);
+    pointer-events: none;
+}
+.fac-frame:hover .fac-photo::before,
+.fac-frame:focus-visible .fac-photo::before { opacity: 1; transform: none; }
+
+/* ---- viewer overlay ---- */
+@keyframes fac-lb-in   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fac-lb-out  { from { opacity: 1; } to { opacity: 0; } }
+@keyframes fac-lb-zoom { from { opacity: 0; transform: scale(.92) translateY(.8rem); } to { opacity: 1; transform: none; } }
+
+body.fac-lb-open { overflow: hidden; }
+
+.fac-lb[hidden] { display: none; }
+.fac-lb {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: rgba(24, 14, 8, .9);
+    animation: fac-lb-in .3s ease;
+}
+.fac-lb.closing { animation: fac-lb-out .22s ease forwards; }
+
+.fac-lb-figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    max-width: min(92vw, 70rem);
+    min-width: 0;
+}
+.fac-lb-figure img {
+    display: block;
+    max-width: 100%;
+    max-height: 78vh;
+    max-height: 78dvh;
+    padding: .4rem;
+    background: var(--cream);
+    border-radius: .9rem;
+    object-fit: contain;
+    animation: fac-lb-zoom .45s cubic-bezier(.2, .7, .2, 1);
+}
+.fac-lb-figure img.swap { animation: none; }
+.fac-lb-figure figcaption {
+    margin-top: .9rem;
+    font-family: var(--font-hero);
+    font-size: 1.5rem;
+    line-height: 1.7rem;
+    color: #fff;
+    text-align: center;
+}
+
+.fac-lb-close, .fac-lb-nav {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    color: var(--cream);
+    background: transparent;
+    border: 1.5px solid rgba(255, 244, 226, .7);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+.fac-lb-close:hover, .fac-lb-close:focus-visible,
+.fac-lb-nav:hover,   .fac-lb-nav:focus-visible { background: var(--cream); color: var(--brown); }
+.fac-lb-nav:hover { transform: scale(1.08); }
+.fac-lb-close { position: absolute; top: 1.25rem; right: 1.5rem; }
+
+@media (prefers-reduced-motion: reduce) {
+    .fac-lb, .fac-lb.closing, .fac-lb-figure img { animation: none; }
+    .fac-photo::before { transition: none; }
+}
+
+@media (max-width: 767.98px) {
+    .fac-lb { gap: 0; padding: 3.5rem .75rem 1.5rem; }
+    .fac-lb-figure { max-width: 100%; }
+    .fac-lb-figure figcaption { font-size: 1.25rem; }
+    .fac-lb-nav {
+        position: absolute;
+        bottom: 1.25rem;
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+    .fac-lb-prev { left: calc(50% - 3.25rem); }
+    .fac-lb-next { right: calc(50% - 3.25rem); }
+    .fac-lb-close { top: .75rem; right: .75rem; }
+    .fac-lb-figure img { max-height: 68vh; max-height: 68dvh; }
+}
+/* Reserve the fixed header area so the full facilities grid is visible on arrival. */
+@media (min-width: 768px) {
+    .fac { min-height: calc(100dvh - var(--header-h) + 3.5rem); }
+}
